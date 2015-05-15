@@ -9,7 +9,8 @@ boolean powerTripped = true;
 boolean warn = false;
 boolean fukd = false;
 
-OneWire  ds(10);  // on pin 10 (a 4.7K resistor is necessary)
+LiquidCrystal lcd(12, 13, 8, 9, 10, 11);
+OneWire  ds(TEMP_PROBE);  // on pin 10 (a 4.7K resistor is necessary)
 
 void setup() {
   Serial.begin(9600);
@@ -31,9 +32,25 @@ void loop(void) {
   readTemp();
 }
 
+void lcdDisplay(float temp){
+//  float temp = (float) random(10000);
+//  temp /= 100;
+//  temp -= 50;
+Serial.print("TEMP_LCD: ");
+Serial.println(temp);
+
+  String output="";
+  output+=temp;
+  lcd.setCursor(0, 0);
+  //lcd.clear();
+  lcd.print(output+"     ");
+}
+
+
 void logTemp(float temp){
   checkWarn(temp);
   checkFukt(temp);
+  lcdDisplay(temp);
 }
 
 void checkPwrTrip(){
